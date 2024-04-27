@@ -28,8 +28,32 @@ class CursoController {
             console.log(error.message)
             res.status(500).json({ error: 'Não foi possível cadastrar o curso' })
         }
-
     }
+
+    //Endpoint GET - Listar cursos (todos ou por parâmetros)
+    async listar(req, res) {
+        try {
+            let params = {};
+    
+            if (req.query.nome) {
+                params = { ...params, nome: req.query.nome }
+            }
+    
+            if (req.query.duracao_horas) {
+                params = { ...params, duracao_horas: req.query.duracao_horas }
+            }
+    
+            const cursos = await Curso.findAll({
+                where: params
+            })
+    
+            res.json(cursos)
+        } catch (error) {
+            console.log(error.message)
+            res.status(500).json({ error: 'Não foi possível listar todos os cursos' })
+        }
+    }
+
 };
 
 module.exports = new CursoController();
