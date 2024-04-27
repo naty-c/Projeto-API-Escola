@@ -26,7 +26,7 @@ class CursoController {
             res.status(201).json(curso)
         } catch (error) {
             console.log(error.message)
-            res.status(500).json({ error: 'Não foi possível cadastrar o curso' })
+            res.status(500).json({ error: 'Não foi possível cadastrar o curso' });
         }
     }
 
@@ -50,7 +50,7 @@ class CursoController {
             res.json(cursos)
         } catch (error) {
             console.log(error.message)
-            res.status(500).json({ error: 'Não foi possível listar todos os cursos' })
+            res.status(500).json({ error: 'Não foi possível listar todos os cursos' });
         }
     }
 
@@ -62,7 +62,7 @@ class CursoController {
             const curso = await Curso.findByPk(id);
     
             if (!curso) {
-                return res.status(404).json({ message: 'Curso não encontrado' })
+                return res.status(404).json({ message: 'Curso não encontrado' });
             }
     
             curso.update(req.body)
@@ -71,10 +71,30 @@ class CursoController {
     
             res.json(curso)
         } catch (error) {
-            res.status(500).json({ error: 'Não foi possível atualizar o curso' })
+            res.status(500).json({ error: 'Não foi possível atualizar o curso' });
         }
     }
 
+    //Endpoint DELETE - Remover curso por ID
+    async deletar(req, res) {
+        try {
+            const { id } = req.params
+    
+            const curso = await Curso.destroy({
+                where: {
+                    id: id
+                }
+            });
+    
+            if (curso === 0) {
+                return res.status(404).json({ message: 'Curso não encontrado!' });
+            }
+    
+            res.status(204).json({});
+        } catch (error) {
+            res.status(500).json({ error: 'Não foi possível deletar o curso' });
+        }
+    }   
 };
 
 module.exports = new CursoController();
